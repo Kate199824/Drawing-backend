@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.data.SystemData;
 import com.example.demo.service.DownloadService;
+import com.example.demo.service.ProjectService;
 import com.example.demo.service.UploadService;
 import com.example.demo.service.UserService;
 import net.minidev.json.JSONObject;
@@ -19,6 +20,8 @@ public class MainController {
     DownloadService downloadService;
     @Autowired
     UserService userService;
+    @Autowired
+    ProjectService projectService;
 
     @PostMapping("/upload")
     public JSONObject uploadDrawing(HttpServletRequest request, @RequestBody JSONObject jsonObject){
@@ -26,9 +29,10 @@ public class MainController {
         System.out.println(username);
         String userRoute = userService.getUserRoute(username);
         ArrayList<ArrayList<Integer>> points = (ArrayList<ArrayList<Integer>>)jsonObject.get("points");
+        String userFilename = jsonObject.getAsString("userFilename");
         System.out.println("List: "+points);
 
-        String filename = uploadService.upload(userRoute, points);
+        String filename = uploadService.upload(userRoute, userFilename, points);
 
         JSONObject obj = new JSONObject();
         obj.put("filename",filename);
@@ -39,6 +43,7 @@ public class MainController {
     public JSONObject downloadDrawing(HttpServletRequest request, @PathVariable String filename){
         String username = request.getHeader("username");
         System.out.println(username);
+
         String userRoute = userService.getUserRoute(username);
 
         ArrayList<ArrayList<Integer>> points = downloadService.getPicture(userRoute, filename);
@@ -77,10 +82,35 @@ public class MainController {
         String username = request.getHeader("username");
         System.out.println(username);
         String userRoute = userService.getUserRoute(username);
-        ArrayList<String> res = userService.getUserProjects(userRoute);
+        ArrayList<String> res = projectService.getUserProjects(userRoute);
 
         JSONObject obj = new JSONObject();
         obj.put("result",res);
         return obj;
     };
+
+    @GetMapping("/delete/{filename}")
+    public JSONObject deleteDrawing(HttpServletRequest request, @PathVariable String filename){
+        String username = request.getHeader("username");
+        System.out.println(username);
+        String userRoute = userService.getUserRoute(username);
+        projectService.deleteProject(userRoute, filename);
+
+        JSONObject obj = new JSONObject();
+        obj.put("result","");
+        return obj;
+    };
+
+    @GetMapping("/login/{username}")
+    public JSONObject login(HttpServletRequest request){
+        String username = request.getHeader("username");
+        System.out.println(username);
+
+        userService.login();
+
+        JSONObject obj = new JSONObject();
+        obj.put("result","");
+        return obj;
+    };
+
 }

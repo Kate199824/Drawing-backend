@@ -6,6 +6,6 @@ public interface UserService {
 
     public String getUserRoute(String username);
 
-    public ArrayList<String> getUserProjects(String userRoute);
+    public void login ();
 
 }

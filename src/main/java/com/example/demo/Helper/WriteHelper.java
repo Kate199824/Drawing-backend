@@ -1,7 +1,8 @@
-package com.example.demo.util;
+package com.example.demo.Helper;
 
 import com.example.demo.data.Result;
 import com.example.demo.data.SystemData;
+import com.example.demo.util.Translator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
