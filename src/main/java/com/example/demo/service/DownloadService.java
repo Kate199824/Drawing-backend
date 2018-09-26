@@ -7,4 +7,6 @@ public interface DownloadService {
 
     public ArrayList<ArrayList<Integer>> getResult(String userRoute, String filename);
 
+    public String getName(String userRoute, String filename);
+
 }

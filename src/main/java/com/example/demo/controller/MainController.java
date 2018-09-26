@@ -31,7 +31,7 @@ public class MainController {
         String filename = uploadService.upload(userRoute, points);
 
         JSONObject obj = new JSONObject();
-        obj.put("result","aaa");
+        obj.put("filename",filename);
         return obj;
     };
 
@@ -57,6 +57,30 @@ public class MainController {
 
         JSONObject obj = new JSONObject();
         obj.put("result",points);
+        return obj;
+    };
+
+    @GetMapping("/shapeName/{filename}")
+    public JSONObject getRecognizedName(HttpServletRequest request, @PathVariable String filename){
+        String username = request.getHeader("username");
+        System.out.println(username);
+        String userRoute = userService.getUserRoute(username);
+        String name = downloadService.getName(userRoute, filename);
+
+        JSONObject obj = new JSONObject();
+        obj.put("result",name);
+        return obj;
+    };
+
+    @GetMapping("/all")
+    public JSONObject getAll(HttpServletRequest request){
+        String username = request.getHeader("username");
+        System.out.println(username);
+        String userRoute = userService.getUserRoute(username);
+        ArrayList<String> res = userService.getUserProjects(userRoute);
+
+        JSONObject obj = new JSONObject();
+        obj.put("result",res);
         return obj;
     };
 }

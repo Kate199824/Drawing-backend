@@ -25,4 +25,10 @@ public class DownloadServiceImpl implements DownloadService {
         ArrayList<ArrayList<Integer>> points = readHelper.read(userRoute+"/"+filename+"/result");
         return points;
     }
+
+    @Override
+    public String getName(String userRoute, String filename) {
+        String name = readHelper.readName(userRoute+"/"+filename+"/name");
+        return name;
+    }
 }

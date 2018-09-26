@@ -15,6 +15,15 @@ public class ReadHelper {
     Translator translator;
 
     public ArrayList<ArrayList<Integer>> read(String url){
+        String res = readString(url);
+        return translator.String2Array(res);
+    }
+
+    public String readName (String url){
+        return readString(url);
+    }
+
+    private String readString(String url){
         String res = "";
         try {
             FileReader fr = new FileReader(SystemData.BASE_ROUTE+"/"+url);
@@ -24,6 +33,6 @@ public class ReadHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return translator.String2Array(res);
+        return  res;
     }
 }

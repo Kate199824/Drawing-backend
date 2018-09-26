@@ -1,6 +1,8 @@
 package com.example.demo.serviceImpl;
 
+import com.example.demo.data.Result;
 import com.example.demo.service.UploadService;
+import com.example.demo.util.FileNameHelper;
 import com.example.demo.util.RecognizeHelper;
 import com.example.demo.util.WriteHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,15 @@ public class UploadServiceImpl implements UploadService {
     WriteHelper writeHelper;
     @Autowired
     RecognizeHelper recognizeHelper;
+    @Autowired
+    FileNameHelper fileNameHelper;
 
     @Override
     public String upload(String userRoute, ArrayList<ArrayList<Integer>> points) {
-        String filename = "filename";//get
+        String filename = fileNameHelper.getFileName(userRoute);//get
 
         writeHelper.saveOrigin(userRoute+"/"+filename,points);
-        ArrayList<ArrayList<Integer>> result = recognizeHelper.recognize(points);
+        Result result = recognizeHelper.recognize(points);
         writeHelper.saveResult(userRoute+"/"+filename, result);
 
         return filename;

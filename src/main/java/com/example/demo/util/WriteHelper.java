@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.example.demo.data.Result;
 import com.example.demo.data.SystemData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,37 +15,30 @@ public class WriteHelper {
     Translator translator;
 
     public void saveOrigin(String url, ArrayList<ArrayList<Integer>> points){
-        String s = SystemData.BASE_ROUTE+"/"+url+"/origin";
-        System.out.println(s);
-        File file = new File(SystemData.BASE_ROUTE+"/"+url+"/origin");
+        String dir = SystemData.BASE_ROUTE+"/"+url+"/origin";
         String pointsString = translator.Array2String(points);
-        try{
-            if(!file.exists()){
-                File dir = new File(SystemData.BASE_ROUTE+"/"+url);
-                dir.mkdirs();
-                file.createNewFile();
-                FileWriter fw = new FileWriter(file);
-                fw.write(pointsString);
-                fw.flush();
-                fw.close();
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        saveFile(dir,pointsString);
     }
 
-    public void saveResult(String url, ArrayList<ArrayList<Integer>> points){
-        String s = SystemData.BASE_ROUTE+"/"+url+"/origin";
-        System.out.println(s);
-        File file = new File(SystemData.BASE_ROUTE+"/"+url+"/result");
-        String pointsString = translator.Array2String(points);
+    public void saveResult(String url, Result result){
+        String dir = SystemData.BASE_ROUTE+"/"+url+"/result";
+        String pointsString = translator.Array2String(result.getParsedPoints());
+        saveFile(dir,pointsString);
+
+        String nameDir = SystemData.BASE_ROUTE+"/"+url+"/name";
+        String nameString = result.getName();
+        saveFile(nameDir, nameString);
+    }
+
+    private void saveFile(String url, String content){
+        File file = new File(url);
         try{
             if(!file.exists()){
-                File dir = new File(SystemData.BASE_ROUTE+"/"+url);
+                File dir = new File(url.substring(0,url.lastIndexOf('/')));
                 dir.mkdirs();
                 file.createNewFile();
                 FileWriter fw = new FileWriter(file);
-                fw.write(pointsString);
+                fw.write(content);
                 fw.flush();
                 fw.close();
             }
